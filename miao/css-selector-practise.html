@@ -21,6 +21,19 @@
       color: blue;
     }
 
+    .a.c>span {
+      color: red;
+    }
+
+    .a.c>span>span:nth-child(1) {
+      color: green;
+
+    }
+
+    .a.c>span>span:nth-child(2) {
+      color: blue;
+    }
+
     div>p~a:visited {
       color: orange;
     }
@@ -79,9 +92,9 @@
 
     .prime li:first-child,
     li:nth-child(2n + 4),
-    li:nth-child(3n + 6),
-    li:nth-child(5n + 10),
-    li:nth-child(7n + 14) {
+    li:nth-child(3n + 9),
+    li:nth-child(5n + 25),
+    li:nth-child(7n + 49) {
       color: yellowgreen;
 
     }
