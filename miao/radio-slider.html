@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>轮播图</title>
+  <style>
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .content {
+      width: 400px;
+      height: 400px;
+
+
+    }
+
+    img {
+      width: 400px;
+      height: 400px;
+      object-fit: contain;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .content input:nth-child(1):checked~ul>li:nth-child(1) img {
+      display: block;
+    }
+
+    .content input:nth-child(2):checked~ul>li:nth-child(2) img {
+      display: block;
+    }
+
+    .content input:nth-child(3):checked~ul>li:nth-child(3) img {
+      display: block;
+    }
+
+    .content input:nth-child(4):checked~ul>li:nth-child(4) img {
+      display: block;
+    }
+
+    .content input:nth-child(5):checked~ul>li:nth-child(5) img {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <input type="radio" name="s1" id="s1-2">
+    <input type="radio" name="s1" id="s1-3">
+    <input type="radio" name="s1" id="s1-4">
+    <input type="radio" name="s1" id="s1-5">
+    <input type="radio" name="s1" id="s1-6">
+
+    <ul>
+      <li><img
+          src="https://travel.12306.cn/imgs/resources/uploadfiles/images/243945e6-c45d-4870-9cf5-77e488068646_product_W572_H370.jpg"
+          alt=""></li>
+      <li><img
+          src="https://travel.12306.cn/imgs/resources/uploadfiles/images/b0c76b21-531b-4af4-a607-cf5672c72ded_product_W572_H370.jpg"
+          alt=""></li>
+      <li><img
+          src="https://travel.12306.cn/imgs/resources/uploadfiles/images/6d77d0ea-53d0-4518-b7e9-e53795b4920c_product_W572_H370.jpg"
+          alt=""></li>
+      <li><img
+          src="https://travel.12306.cn/imgs/resources/uploadfiles/images/d9ae79de-2f3f-4e9f-ad6e-bdc291dda92a_product_W572_H370.jpg"
+          alt=""></li>
+      <li><img
+          src="https://travel.12306.cn/imgs/resources/uploadfiles/images/1716878f-79a2-4db1-af8c-b9c2039f0b3c_product_W572_H370.jpg"
+          alt=""></li>
+    </ul>
+  </div>
+</body>
