@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    * {
+      background-color: rgba(0, 0, 0, 0.1);
+
+      white-space: nowrap;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0px;
+
+
+    }
+
+    li {
+      font-size: 14px;
+      padding: 5px 5px;
+
+    }
+
+    .menu>li {
+      position: relative;
+      display: inline-block;
+
+
+
+
+
+
+
+    }
+
+
+
+    ul ul {
+
+      position: absolute;
+
+      left: 0px;
+      /* "距离父元素100%" */
+      top: 100%;
+
+      display: none;
+
+
+
+
+
+    }
+
+    ul ul ul {
+      display: none;
+      position: absolute;
+      left: 100%;
+      top: 0px;
+
+    }
+
+    li:hover>ul {
+      display: block;
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <ul class="menu">
+    <li>
+      数码
+      <ul>
+        <li>手机
+          <ul>
+            <li>iphone7</li>
+            <li>iphone8</li>
+            <li>iphone9</li>
+            <li>iphone11</li>
+          </ul>
+        </li>
+        <li>摄像机</li>
+        <li>电视机</li>
+        <li>老爷机超级老爷</li>
+      </ul>
+    </li>
+
+    <li>
+      清洁用品
+      <ul>
+        <li>洗衣粉</li>
+        <li>拖把</li>
+        <li>扫走和拖鞋</li>
+        <li>威猛先生超级威猛</li>
+      </ul>
+    </li>
+
+    <li>
+      手电筒
+      <ul>
+        <li>迪卡侬</li>
+        <li>野人部落</li>
+        <li>山地玩家</li>
+        <li>户外旅途</li>
+
+      </ul>
+    </li>
+    <li>
+      高清电影
+      <ul>
+        <li>欧美大片</li>
+        <li>日韩鬼片</li>
+        <li>国内爱过片</li>
+        <li>高清日漫</li>
+      </ul>
+    </li>
+  </ul>
+
+
+</body>
