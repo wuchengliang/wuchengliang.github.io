@@ -1,0 +1,75 @@
+@font-face {
+  font-family: FontAwesome;
+  src: url("./fontawesome-webfont.woff2");
+  
+}
+.fa {
+  display: inline-block;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+}
+.fa-fw {
+  width: 1.3em;
+  text-align: center;
+
+}
+.fa-lg{
+  font-size: 1.5em;
+}
+.fa-2x {
+  font-size: 2em;
+}
+.fa-3x {
+  font-size: 3em;
+}
+.fa-4x {
+  font-size: 4em;
+}
+.fa-5x {
+  font-size: 5em;
+}
+.fa-music::before {
+  content: "\f001";
+}
+.fa-search::before {
+  content: "\f002";
+}
+
+.fa-element::before {
+  content: "\f003";
+}
+.fa-ul {
+  list-style: none;
+}
+.fa-li {
+  position: absolute;
+  left: 0;
+  width: 300px;
+  text-align: center;
+  vertical-align: 0.141857em;
+   
+
+
+}
+.fa-pull-right{
+  float: right;
+
+}
+.fa-pull-left {
+  float: left;
+
+}
+
+
+.fa-border {
+  padding: 0.2em;
+  border:2px solid #ccc;
+  border-radius: 0.1em;
+}
+.fa-border.fa-pull-right {
+  margin: 0 0 1em 1em;
+}
+.fa-border.fa-pull-left {
+  margin:0 1em 1em 0;
+}

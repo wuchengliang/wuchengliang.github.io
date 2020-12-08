@@ -1,0 +1,48 @@
+<script>
+  var a = +prompt("请输入数字")
+  var b = 333
+  var c = 99
+  var d = 12
+  var e = 8
+  var f = 0
+
+  // var x = (c * e - b * f) / (a * e - b * d)
+  // var y = (c * d - a * f) / (b * d - a * e)
+  // console.log(x)
+  // console.log(y)
+  var x1 = (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
+  var x2 = (-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a)
+  console.log("x1 = " + x1)
+  console.log("x2 =" + x2)
+  console.log(a)
+  //a *x + b*y == c
+  // d * x + e * y == f
+  //除法产生的浮点数不准确，可能永远相等不了。所以要用减法
+  //=----计算斜率是否相等确定这方程有没有解---------==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  if (-(a / b) + (d / e) < 0.00000001) {
+    console.log("此方程无解")
+  } else {
+    console.log("此方程有解")
+  }
+
+  //--------------通过计算delta来判断又没有解-----------------------------------------
+  var delta = b * b - 4 * a * c
+  if (delta == 0) {
+    console.log("有一个解，解为" + (b / -2 * a))
+
+
+
+  } else if (delta > 0) {
+    console.log("有两个解")
+    var x1 = (-b + Math.sqrt(delta)) / (2 * a)
+    var x2 = (-b - Math.sqrt(delta)) / (2 * a)
+    console.log("x1 = " + x1)
+    console.log("x2 =" + x2)
+
+
+  }
+  else {
+    console.log("此方程无解")
+  }
+
+</script>
