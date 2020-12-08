@@ -11,8 +11,10 @@ var wuchengliang = function () {
   }
 
 
+  return {
+    compact,
 
-
+  }
 
 
 }()
