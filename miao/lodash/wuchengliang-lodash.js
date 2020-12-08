@@ -1,4 +1,5 @@
 var wuchengliang = function () {
+
   function compact(ary) {
     var result = []
     for (var i = 0; i < ary.length; i++) {
@@ -6,10 +7,11 @@ var wuchengliang = function () {
         result.push(ary[i])
       }
     }
+    return result
   }
 
 
-  return result
+
 
 
 
