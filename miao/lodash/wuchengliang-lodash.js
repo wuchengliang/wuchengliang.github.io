@@ -67,21 +67,13 @@ var wuchengliang = function () {
 
   }
   function indexOf(array, value, fromIndex = 0) {
-    if (fromIndex >= 0) {
-      for (i = fromIndex; i < array.length; i++) {
-        if (array[i] == value) {
-          return i
-        }
-      }
-    }
-    else {
-      for (i = array.length - 1; i >= 0; i--) {
-        if (array[i] == value) {
-          return i
-        }
+    for (i = fromIndex; i < array.length; i++) {
+      if (array[i] == value) {
+        return i
       }
     }
   }
+
   function initial(array) {
     if (array.length == 0) {
       return []
@@ -121,19 +113,15 @@ var wuchengliang = function () {
 
     while (right > left) {
       var mid = (left + right) >> 1
-      if (array[mid] == value) {
-        return mid
-      }
-      if (array[mid] < value && array[mid + 1] >= value) {
-        return mid + 1
-      }
-      if (array[mid] > value) {
+      if (array[mid] >= value) {
         right = mid
       }
-      if (array[mid] < value) {
-        left = mid
+      else {
+        left = mid + 1
       }
+
     }
+    return right
   }
   function toArray(value) {
     var result = []
@@ -147,7 +135,7 @@ var wuchengliang = function () {
       return result
     }
     else {
-      return null
+      return result
     }
 
   }
