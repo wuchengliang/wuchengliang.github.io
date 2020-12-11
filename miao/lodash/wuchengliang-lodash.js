@@ -37,14 +37,20 @@ var wuchengliang = function () {
         return i
       }
     }
+    return -1
   }
   function drop(ary, n = 1) {
     ary.splice(0, n)
     return ary
   }
   function dropRight(ary, n = 1) {
-    ary.splice(ary.length - n - 1, n)
-    return ary
+    if (ary.length <= n) {
+      return []
+    }
+    else {
+      ary.splice(ary.length - n, n)
+      return ary
+    }
   }
   function fill(ary, value, start = 0, end = ary.length) {
     for (var i = start; i < end; i++) {
@@ -52,7 +58,133 @@ var wuchengliang = function () {
     }
     return ary
   }
+  function head(ary) {
+    // if (ary.length == 0) {
+    //   return null
+    // }
 
+    return ary[0]
+
+  }
+  function indexOf(array, value, fromIndex = 0) {
+    if (fromIndex >= 0) {
+      for (i = fromIndex; i < array.length; i++) {
+        if (array[i] == value) {
+          return i
+        }
+      }
+    }
+    else {
+      for (i = array.length - 1; i >= 0; i--) {
+        if (array[i] == value) {
+          return i
+        }
+      }
+    }
+  }
+  function initial(array) {
+    if (array.length == 0) {
+      return []
+    }
+    else {
+      return array.slice(0, array.length - 1)
+    }
+  }
+  function reverse(array) {
+    var right = 0
+    var left = array.length - 1
+    while (right < left) {
+      var t = array[right]
+      array[right] = array[left]
+      array[left] = t
+      right++
+      left--
+    }
+    return array
+
+  }
+  function sortedIndex(array, value) {
+    var left = 0
+    var right = array.length - 1
+    if (right == left) {
+      if (array[left] < value) {
+        return 1
+      }
+      return 0
+    }
+    if (value > array[right]) {
+      return right + 1
+    }
+    if (value < array[left]) {
+      return 0
+    }
+
+    while (right > left) {
+      var mid = (left + right) >> 1
+      if (array[mid] == value) {
+        return mid
+      }
+      if (array[mid] < value && array[mid + 1] >= value) {
+        return mid + 1
+      }
+      if (array[mid] > value) {
+        right = mid
+      }
+      if (array[mid] < value) {
+        left = mid
+      }
+    }
+  }
+  function toArray(value) {
+    var result = []
+    if (typeof (value) == "string") {
+      return value.split("")
+    }
+    else if (typeof (value) == "object") {
+      for (i in value) {
+        result.push(value[i])
+      }
+      return result
+    }
+    else {
+      return null
+    }
+
+  }
+  function max(ary) {
+    var max1 = -Infinity
+    if (ary.length == 0 || !ary) {
+      return undefined
+    }
+    for (i = 0; i < ary.length; i++) {
+      if (max1 < ary[i]) {
+        max1 = ary[i]
+      }
+    }
+    return max1
+  }
+  function min(ary) {
+    var min1 = Infinity
+    if (!ary || ary.length == 0) {
+      return undefined
+    }
+    for (i = 0; i < ary.length; i++) {
+      if (min1 > ary[i]) {
+        min1 = ary[i]
+      }
+    }
+    return min1
+  }
+  function sum(ary) {
+    var sum1 = 0
+    if (ary.length == 0 || !ary) {
+      return undefined
+    }
+    for (i = 0; i < ary.length; i++) {
+      sum1 += ary[i]
+    }
+    return sum1
+  }
 
 
 
@@ -65,6 +197,15 @@ var wuchengliang = function () {
     drop,
     dropRight,
     fill,
+    head,
+    indexOf,
+    initial,
+    reverse,
+    sortedIndex,
+    toArray,
+    max,
+    min,
+    sum,
 
 
 
