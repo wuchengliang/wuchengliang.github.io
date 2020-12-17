@@ -173,7 +173,98 @@ var wuchengliang = function () {
     }
     return sum1
   }
+  function flatten(array) {
+    return [].concat(...array)
+    //return [].concat.apply([],arrays)这两个是等价的
+  }
+  function concat(...values) {//values在操作的时候是个数组
+    var result = []
+    for (let i = 0; i < values.length; i++) {
+      if (Array.isArray(values[i])) {
+        values[i].forEach(it => {
+          result.push(it)
+        })
+      }
+      else {
+        result.push(values[i])
+      }
 
+
+    }
+    return result
+
+  }
+  function flattenDeep(arrays) {
+    var result = []
+    for (let i = 0; i < arrays.length; i++) {
+      if (Array.isArray(arrays[i])) {
+        result = result.concat(flattenDeep(arrays[i]))
+      }
+      else {
+        result = result.concat(arrays[i])
+      }
+
+    }
+    return result
+  }
+  function flattenDepth(arrays, depth = 1) {
+    var result = []
+    if (depth == 0) {
+      return arrays.slice()//复制函数
+    }
+    for (let i = 0; i < arrays.length; i++) {
+      if (Array.isArray(arrays[i])) {
+        result = result.concat(flattenDepth(arrays[i], depth - 1))
+      }
+      else {
+        result.push(arrays[i])
+      }
+
+    }
+    return result
+  }
+  function groupBy(collection, iteratee = identity) {
+    var result = {}
+    for (let i = 0; i < collection.length; i++) {
+      var key = iteratee(collection[i])
+      if (!Array.isArray(result[key])) { //来判断对象属性里是否已经有值了
+        result[key] = []
+
+      }
+
+      result[key].push(collection[i])
+    }
+
+    return result
+
+  }
+  function identity(...ary) {
+    return ary[0]
+  }
+  function sumBy(array, iteratee = identity) {
+    var sum = 0
+    for (let i = 0; i < array.length; i++) {
+      sum += iteratee(array[i])
+    }
+    return sum
+  }
+  function mapValues(object, iteratee = identity) {
+    var result = {}
+
+    for (var key in object) {
+      result[key] = iteratee(object[key], key, object)
+
+    }
+    return result
+  }
+  function mapKeys(object, iteratee = identity) {
+    var result = {}
+    for (var key in object) {
+      var a = iteratee(object[key], key, object)
+      result[a] = object[key]
+    }
+    return result
+  }
 
 
   return {
@@ -194,6 +285,16 @@ var wuchengliang = function () {
     max,
     min,
     sum,
+    flatten,
+    concat,
+    flattenDeep,
+    flattenDepth,
+    groupBy,
+    identity,
+    sumBy,
+    mapValues,
+    mapKeys,
+
 
 
 
