@@ -55,13 +55,7 @@ var wuchengliang = function () {
   function dropRightWhile(array, predicate = identity) {
     var pre = iteratee(predicate)
     arrays = array.splice()
-    for (let i = array.length - 1; i >= 0; i--) {
-      if (pre(array[i])) {
-        arrays.pop()
-      }
-
-    }
-    return arrays
+    return arrays.filter(pre)//需要再想想
 
   }
   function fill(ary, value, start = 0, end = ary.length) {
@@ -255,8 +249,9 @@ var wuchengliang = function () {
   }
   function sumBy(array, iteratees = identity) {
     var sum = 0
+    var pre = iteratee(iteratees)
     for (let i = 0; i < array.length; i++) {
-      sum += iteratees(array[i])
+      sum += pre(array[i])
     }
     return sum
   }
@@ -301,19 +296,30 @@ var wuchengliang = function () {
 
 
   }
-  function ary(f, n = f.length) {
-    return function () {
-
+  function ary(f, n = f.length) {//限制传入ary的参数
+    return function (...args) {
+      return f(...args.slice(0, n))
     }
   }
-  function before(n, func) {
-    return function () {
-
+  function before(n, func) {//调用func的函数，通过this绑定和创建函数的参数调用func，调用次数不超过 n 次。 之后再调用这个函数，将返回一次最后调用func的结果。
+    var c = 0
+    var result //用来保存最后一次的结果
+    return function (...args) {
+      if (c < n) {
+        return result = func.call(this, ...args)
+        c++
+      } else {
+        return result
+      }
     }
   }
-  function after(n, func) {
-    return function () {
-
+  function after(n, func) { //调用多少次后才会返回这个函数
+    var c = 0
+    return function (...args) {
+      c++
+      if (c > n) {
+        return func.call(this, ...args)
+      }
     }
   }
   function flip(func) {
@@ -321,7 +327,7 @@ var wuchengliang = function () {
       return func(...args.reverse())
     }
   }
-  function negate(predicate) {
+  function negate(predicate) {//针对断言函数 func 结果取反的函数。 func 断言函数被调用的时候，this 绑定到创建的函数，并传入对应参数。
     return function (...args) {
       return !predicate
     }
@@ -362,10 +368,14 @@ var wuchengliang = function () {
   function matches(src) {
     return bind(isMatch, null, " ", src)
   }
-  function machesProperty(path, srcValue) {
-    var obj = {}
-    obj[path] = srcValue
-    return matches(obj)
+  function matchesProperty(path, srcValue) {
+    if (isArray(path)) {
+      srcValue = path[1]
+      path = path[0]
+    }
+    return (obj) => {
+      return obj[path] == srcValue
+    }
   }
   function bind(func, thisArg, ...partials) {
     return function (...args) {
@@ -384,14 +394,14 @@ var wuchengliang = function () {
   }
   function iteratee(predicate) {//根据传入的参数类型来返回函数
     if (typeof predicate === "string") {
-      return property(predicate) //这个函数也没写
+      return property(predicate)
 
     }
     if (typeof predicate === "object") {
       return matches(predicate)
     }
     if (Array.isArray(predicate)) {
-      return machesProperty(predicate) //这个函数还没写
+      return machesProperty(predicate)
     }
     if (typeof predicate === "function") {
       return predicate
@@ -435,9 +445,13 @@ var wuchengliang = function () {
     matches,
     get,
     property,
-    machesProperty,
+    matchesProperty,
     iteratee,
     dropRightWhile,
+    ary,
+    before,
+    after,
+    negate,
 
 
 
