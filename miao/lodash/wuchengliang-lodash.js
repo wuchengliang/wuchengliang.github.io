@@ -52,6 +52,18 @@ var wuchengliang = function () {
       return ary
     }
   }
+  function dropRightWhile(array, predicate = identity) {
+    var pre = iteratee(predicate)
+    arrays = array.splice()
+    for (let i = array.length - 1; i >= 0; i--) {
+      if (pre(array[i])) {
+        arrays.pop()
+      }
+
+    }
+    return arrays
+
+  }
   function fill(ary, value, start = 0, end = ary.length) {
     for (var i = start; i < end; i++) {
       ary[i] = value
@@ -223,10 +235,10 @@ var wuchengliang = function () {
     }
     return result
   }
-  function groupBy(collection, iteratee = identity) {
+  function groupBy(collection, iteratees = identity) {
     var result = {}
     for (let i = 0; i < collection.length; i++) {
-      var key = iteratee(collection[i])
+      var key = iteratees(collection[i])
       if (!Array.isArray(result[key])) { //来判断对象属性里是否已经有值了
         result[key] = []
 
@@ -241,30 +253,151 @@ var wuchengliang = function () {
   function identity(...ary) {
     return ary[0]
   }
-  function sumBy(array, iteratee = identity) {
+  function sumBy(array, iteratees = identity) {
     var sum = 0
     for (let i = 0; i < array.length; i++) {
-      sum += iteratee(array[i])
+      sum += iteratees(array[i])
     }
     return sum
   }
-  function mapValues(object, iteratee = identity) {
+  function mapValues(object, iteratees = identity) {
     var result = {}
 
     for (var key in object) {
-      result[key] = iteratee(object[key], key, object)
+      result[key] = iteratees(object[key], key, object)
 
     }
     return result
   }
-  function mapKeys(object, iteratee = identity) {
+  function mapKeys(object, iteratees = identity) {
     var result = {}
     for (var key in object) {
-      var a = iteratee(object[key], key, object)
+      var a = iteratees(object[key], key, object)
       result[a] = object[key]
     }
     return result
   }
+  function every(collection, predicate = identity) {
+    var sum = true
+    for (let i = 0; i < collection.length; i++) {
+      var a = collection[i]
+      if (Object.prototype.toString.call(a) == "[object Object]") {
+        for (var k in a) {
+          sum = sum && predicate(a[k])
+        }
+      }
+      else {
+        sum = sum && predicate(a)
+      }
+    }
+    return sum
+  }
+  function some(collection, predicate = identity) {
+    return !every(collection, function (...args) {
+      return !predicate(...args)
+    })
+  }
+  function random(lower = 0, upper = 1, floating = true) {
+
+
+  }
+  function ary(f, n = f.length) {
+    return function () {
+
+    }
+  }
+  function before(n, func) {
+    return function () {
+
+    }
+  }
+  function after(n, func) {
+    return function () {
+
+    }
+  }
+  function flip(func) {
+    return function (...args) {
+      return func(...args.reverse())
+    }
+  }
+  function negate(predicate) {
+    return function (...args) {
+      return !predicate
+    }
+  }
+  function get(obj, path, defaultValue) {
+    var names = path.split(",") //记得改成topath
+    for (let key of names) {
+      if (key in Object(obj)) {//把obj转成对象
+        obj = obj[key]
+
+      }
+      else {
+        return defaultValue
+      }
+    }
+    return obj
+  }
+  function property(path) {
+    return bind(get, null, " ", path)
+  }
+  function toPath() {
+
+  }
+  function isMatch(object, source) {
+    for (var key in source) {
+      if (source[key] && typeof source[key] == "object") { //如果用来检查的元素是一个对象就继续执行
+        if (!isMatch(source[key], object[key])) {
+          return false
+        }
+      } else {
+        if (object[key] !== source[key]) {
+          return false
+        }
+      }
+    }
+    return true
+  }
+  function matches(src) {
+    return bind(isMatch, null, " ", src)
+  }
+  function machesProperty(path, srcValue) {
+    var obj = {}
+    obj[path] = srcValue
+    return matches(obj)
+  }
+  function bind(func, thisArg, ...partials) {
+    return function (...args) {
+      var copy = partials.slice()
+      for (let i = 0; i < copy.length; i++) {
+        if (copy[i] === " ") { //表示要跳过的项
+          copy[i] = args.shift()//如果遇到了想要跳过的项，就从要传入的数组当中取第一项代替他
+        }
+      }
+      return func.call(thisArg, ...copy, ...args)//这时候的args已经是处理过的了
+    }
+
+
+
+
+  }
+  function iteratee(predicate) {//根据传入的参数类型来返回函数
+    if (typeof predicate === "string") {
+      return property(predicate) //这个函数也没写
+
+    }
+    if (typeof predicate === "object") {
+      return matches(predicate)
+    }
+    if (Array.isArray(predicate)) {
+      return machesProperty(predicate) //这个函数还没写
+    }
+    if (typeof predicate === "function") {
+      return predicate
+    }
+  }
+
 
 
   return {
@@ -294,6 +427,17 @@ var wuchengliang = function () {
     sumBy,
     mapValues,
     mapKeys,
+    every,
+    some,
+    flip,
+    isMatch,
+    bind,
+    matches,
+    get,
+    property,
+    machesProperty,
+    iteratee,
+    dropRightWhile,
 
 
 
