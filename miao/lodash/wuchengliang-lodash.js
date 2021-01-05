@@ -231,6 +231,7 @@ var wuchengliang = function () {
   }
   function groupBy(collection, iteratees = identity) {
     var result = {}
+    iteratees = iteratee(iteratees)
     for (let i = 0; i < collection.length; i++) {
       var key = iteratees(collection[i])
       if (!Array.isArray(result[key])) { //来判断对象属性里是否已经有值了
@@ -257,7 +258,7 @@ var wuchengliang = function () {
   }
   function mapValues(object, iteratees = identity) {
     var result = {}
-
+    iteratees = iteratee(iteratees)
     for (var key in object) {
       result[key] = iteratees(object[key], key, object)
 
@@ -266,6 +267,7 @@ var wuchengliang = function () {
   }
   function mapKeys(object, iteratees = identity) {
     var result = {}
+    iteratees = iteratee(iteratees)
     for (var key in object) {
       var a = iteratees(object[key], key, object)
       result[a] = object[key]
@@ -274,6 +276,7 @@ var wuchengliang = function () {
   }
   function every(collection, predicate = identity) {
     var sum = true
+    predicate = iteratee(predicate)
     for (let i = 0; i < collection.length; i++) {
       var a = collection[i]
       if (Object.prototype.toString.call(a) == "[object Object]") {
@@ -288,6 +291,7 @@ var wuchengliang = function () {
     return sum
   }
   function some(collection, predicate = identity) {
+    predicate = iteratee(predicate)
     return !every(collection, function (...args) {
       return !predicate(...args)
     })
@@ -329,7 +333,7 @@ var wuchengliang = function () {
   }
   function negate(predicate) {//针对断言函数 func 结果取反的函数。 func 断言函数被调用的时候，this 绑定到创建的函数，并传入对应参数。
     return function (...args) {
-      return !predicate
+      return !predicate(...args)
     }
   }
   function get(obj, path, defaultValue) {
