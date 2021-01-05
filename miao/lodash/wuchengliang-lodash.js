@@ -337,11 +337,12 @@ var wuchengliang = function () {
     }
   }
   function get(obj, path, defaultValue) {
-    var names = path.split(",") //记得改成topath
-    for (let key of names) {
+    if (typeof path == "string") {
+      path = toPath(path)
+    }
+    for (let key of path) {
       if (key in Object(obj)) {//把obj转成对象
         obj = obj[key]
-
       }
       else {
         return defaultValue
@@ -349,11 +350,13 @@ var wuchengliang = function () {
     }
     return obj
   }
-  function property(path) {
-    return bind(get, null, " ", path)
-  }
-  function toPath() {
 
+
+  function property(path) {
+    return bind(get, null, window, path)
+  }
+  function toPath(value) {
+    return value.match(/\w+/g)
   }
   function isMatch(object, source) {
     for (var key in source) {
@@ -370,7 +373,7 @@ var wuchengliang = function () {
     return true
   }
   function matches(src) {
-    return bind(isMatch, null, " ", src)
+    return bind(isMatch, null, window, src)
   }
   function matchesProperty(path, srcValue) {
     if (isArray(path)) {
@@ -381,11 +384,13 @@ var wuchengliang = function () {
       return obj[path] == srcValue
     }
   }
+
+
   function bind(func, thisArg, ...partials) {
     return function (...args) {
       var copy = partials.slice()
       for (let i = 0; i < copy.length; i++) {
-        if (copy[i] === " ") { //表示要跳过的项
+        if (copy[i] === window) { //表示要跳过的项
           copy[i] = args.shift()//如果遇到了想要跳过的项，就从要传入的数组当中取第一项代替他
         }
       }
@@ -456,6 +461,7 @@ var wuchengliang = function () {
     before,
     after,
     negate,
+    toPath,
 
 
 
