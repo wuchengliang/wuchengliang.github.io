@@ -54,8 +54,14 @@ var wuchengliang = function () {
   }
   function dropRightWhile(array, predicate = identity) {
     var pre = iteratee(predicate)
-    arrays = array.splice()
-    return arrays.filter(pre)//需要再想想
+    var result = array
+    for (var i = array.length - 1; i >= 0; i--) {
+      if (!pre(array[i])) {
+        break
+      }
+    }
+    return result.slice(0, i + 1)
+
 
   }
   function fill(ary, value, start = 0, end = ary.length) {
@@ -416,6 +422,26 @@ var wuchengliang = function () {
       return predicate
     }
   }
+  function map(collection, iteratees = identity) {
+    let result = []
+    iteratees = iteratee(iteratees)
+    for (let i = 0; i < collection.length; i++) {
+      result.push(iteratees(collection[i]))
+    }
+    return result
+  }
+  function spread(func) {
+    return function (ary) {
+      return func.apply(this, ary)
+    }
+  }
+  /*柯里化函数，只有传满参数才会返回值，不然都是返回绑定了参数的函数
+  */
+  function curry(func, arity = func.length) {
+
+  }
+
+
 
 
 
@@ -462,6 +488,8 @@ var wuchengliang = function () {
     after,
     negate,
     toPath,
+    map,
+    spread,
 
 
 
