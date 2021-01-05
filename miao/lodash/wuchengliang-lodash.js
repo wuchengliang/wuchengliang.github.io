@@ -259,9 +259,9 @@ var wuchengliang = function () {
   function mapValues(object, iteratees = identity) {
     var result = {}
     iteratees = iteratee(iteratees)
-    for (var key in object) {
-      result[key] = iteratees(object[key], key, object)
-
+    for (key in object) {
+      var value = object[key]
+      result[key] = iteratees(value)
     }
     return result
   }
