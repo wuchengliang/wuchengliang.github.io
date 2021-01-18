@@ -59,8 +59,13 @@ var wuchengliang = function () {
       if (!pre(array[i])) {
         break
       }
+      else {
+        result.pop()
+      }
+
     }
-    return result.slice(0, i + 1)
+    return result
+
 
 
   }
@@ -412,11 +417,11 @@ var wuchengliang = function () {
       return property(predicate)
 
     }
-    if (typeof predicate === "object") {
-      return matches(predicate)
+    if (Object.prototype.toString.call(predicate) == "[object Object]") {
+      return (value) => isMatch(value, predicate);
     }
     if (Array.isArray(predicate)) {
-      return machesProperty(predicate)
+      return (value) => value[predicate[0]] == predicate[1];
     }
     if (typeof predicate === "function") {
       return predicate
