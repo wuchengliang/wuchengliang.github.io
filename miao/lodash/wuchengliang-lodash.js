@@ -54,7 +54,7 @@ var wuchengliang = function () {
   }
   function dropRightWhile(array, predicate = identity) {
     var pre = iteratee(predicate)
-    var result = array
+    var result = array.slice()//深复制了一个数组。增加减少和我无关
     for (var i = array.length - 1; i >= 0; i--) {
       if (!pre(array[i])) {
         break
@@ -65,9 +65,19 @@ var wuchengliang = function () {
 
     }
     return result
-
-
-
+  }
+  function dropWhile(array, predicate = identity) {
+    var pre = iteratee(predicate)
+    var result = array.slice()
+    for (var i = 0; i <= array.length - 1; i++) {
+      if (!pre(array[i])) {
+        break
+      }
+      else {
+        result.shift()
+      }
+    }
+    return result
   }
   function fill(ary, value, start = 0, end = ary.length) {
     for (var i = start; i < end; i++) {
@@ -286,21 +296,17 @@ var wuchengliang = function () {
     return result
   }
   function every(collection, predicate = identity) {
-    var sum = true
+
     predicate = iteratee(predicate)
     for (let i = 0; i < collection.length; i++) {
-      var a = collection[i]
-      if (Object.prototype.toString.call(a) == "[object Object]") {
-        for (var k in a) {
-          sum = sum && predicate(a[k])
-        }
+      if (!predicate(collection[i])) {
+        return false
       }
-      else {
-        sum = sum && predicate(a)
-      }
+
     }
-    return sum
+    return true
   }
+
   function some(collection, predicate = identity) {
     predicate = iteratee(predicate)
     return !every(collection, function (...args) {
@@ -387,7 +393,7 @@ var wuchengliang = function () {
     return bind(isMatch, null, window, src)
   }
   function matchesProperty(path, srcValue) {
-    if (isArray(path)) {
+    if (Array.isArray(path)) {
       srcValue = path[1]
       path = path[0]
     }
@@ -430,8 +436,8 @@ var wuchengliang = function () {
   function map(collection, iteratees = identity) {
     let result = []
     iteratees = iteratee(iteratees)
-    for (let i = 0; i < collection.length; i++) {
-      result.push(iteratees(collection[i]))
+    for (var k in collection) {
+      result.push(iteratees(collection[k]))
     }
     return result
   }
@@ -445,6 +451,89 @@ var wuchengliang = function () {
   function curry(func, arity = func.length) {
 
   }
+  function difference(array, ...values) {
+    values = flattenDeep(values)
+    for (var k of values) {
+      for (var i = 0; i <= array.length - 1; i++) {
+        if (array[i] == k) {
+          array.splice(i, 1)
+        }
+      }
+    }
+    return array
+  }
+  function includes(collection, value, fromIndex = 0) {
+    if (Array.isArray(collection)) {
+      if (fromIndex >= 0) {
+        for (let i = fromIndex; i < collection.length; i++) {
+          if (value == collection[i]) {
+            return true
+          }
+        }
+      }
+      if (fromIndex < 0) {
+        for (let i = collection.length - 1; i >= 0; i--) {
+          if (value == collection[i]) {
+            return true
+          }
+        }
+      }
+      return false
+    }
+    if (Object.prototype.toString.call(collection) == "[object Object]") {
+      for (var k in collection) {
+        if (collection[k] == value) {
+          return true
+        }
+      }
+    }
+    if (typeof collection === "string") {
+      if (collection.indexOf(value) !== '-1') {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+
+  }
+  function differenceBy(arrays, values, iteratees) {
+    iteratees = iteratee(iteratees)
+    for (var i = 0; i < arrays.length; i++) {
+      var a = iteratees(arrays[i])
+      for (var j = 0; j < values.length; j++) {
+        var b = iteratees(values[j])
+        if (a == b) {
+          arrays.splice(i, 1)
+        }
+      }
+    }
+    return arrays
+  }
+  function differenceWith(arrays, values, comparator) {
+    for (var i = 0; i < arrays.length; i++) {
+      var a = arrays[i]
+      for (var j = 0; j < values.length; j++) {
+        var b = values[j]
+        if (comparator(a, b)) {
+          arrays.splice(i, 1)
+        }
+      }
+    }
+    return arrays
+  }
+  function findIndex(array, predicate = identity, fromIndex = 0) {
+    for (var i = fromIndex; i < array.length; i++) {
+      var pre = iteratee(predicate)
+      if (pre(array[i])) {
+        return i
+      }
+      else {
+        return -1
+      }
+    }
+  }
+
 
 
 
@@ -495,7 +584,12 @@ var wuchengliang = function () {
     toPath,
     map,
     spread,
-
+    difference,
+    includes,
+    differenceBy,
+    differenceWith,
+    dropWhile,
+    findIndex,
 
 
 
