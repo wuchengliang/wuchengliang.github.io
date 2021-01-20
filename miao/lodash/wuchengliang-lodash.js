@@ -452,15 +452,14 @@ var wuchengliang = function () {
 
   }
   function difference(array, ...values) {
-    values = flattenDeep(values)
-    for (var k of values) {
-      for (var i = 0; i <= array.length - 1; i++) {
-        if (array[i] == k) {
-          array.splice(i, 1)
-        }
+    let result = [];
+    values = flatten(values);
+    for (let i = 0; i < array.length; i++) {
+      if (!values.includes(array[i])) {
+        result.push(array[i]);
       }
     }
-    return array
+    return result;
   }
   function includes(collection, value, fromIndex = 0) {
     if (Array.isArray(collection)) {
@@ -497,18 +496,26 @@ var wuchengliang = function () {
     }
 
   }
-  function differenceBy(arrays, values, iteratees) {
-    iteratees = iteratee(iteratees)
-    for (var i = 0; i < arrays.length; i++) {
-      var a = iteratees(arrays[i])
-      for (var j = 0; j < values.length; j++) {
-        var b = iteratees(values[j])
-        if (a == b) {
-          arrays.splice(i, 1)
+  function differenceBy(arrays, ...values) {
+    var pre = values[values.length - 1]
+    if (Array.isArray(pre)) {
+      return difference(arrays, ...values)
+    }
+    else {
+      var pre1 = values.pop()
+      var iteratees = iteratee(pre1)
+      var result = []
+      values = flatten(values)
+      var array1 = arrays.map((it) => iteratees(it))
+      var value1 = values.map((it) => iteratees(it))
+      for (let i = 0; i < array1.length; i++) {
+        if (!value1.includes(array1[i])) {
+          result.push(arrays[i])
         }
       }
+
     }
-    return arrays
+    return result
   }
   function differenceWith(arrays, values, comparator) {
     for (var i = 0; i < arrays.length; i++) {
@@ -528,10 +535,63 @@ var wuchengliang = function () {
       if (pre(array[i])) {
         return i
       }
-      else {
-        return -1
+    }
+    return -1
+  }
+  function findLastIndex(array, predicate = identity, fromIndex = array.length - 1) {
+    for (var i = fromIndex; i >= 0; i--) {
+      var pre = iteratee(predicate)
+      if (pre(array[i])) {
+        return i
       }
     }
+    return -1
+  }
+  function fromPairs(pairs) {
+    var result = {}
+    for (var i = 0; i < pairs.length; i++) {
+      result[pairs[i][0]] = pairs[i][1]
+    }
+    return result
+  }
+  function intersection(...arrays) {
+    var array1 = arrays[0]
+    for (var i = 1; i < arrays.length; i++) {
+      for (k of arrays[i]) {
+        var result = []
+        if (array1.includes(k)) {
+          if (!result.includes(k)) {
+            result.push(k)
+          }
+          array1 = result.slice()
+        }
+      }
+    }
+    return result
+
+  }
+  function intersectionBy(...arrays) {
+    var pre = arrays.pop()
+    var iteratees = iteratee(pre)
+    var array0 = arrays[0].map(it => iteratees(it))
+
+    for (let i = 1; i < arrays.length; i++) {
+      var result = []
+      array1 = arrays[i].map(it => iteratees(it))
+      for (let j = 0; j < array0.length; j++) {
+        if (array1.includes(array0[j])) {
+          if (!result.includes(arrays[0][j])) {
+            result.push(arrays[0][j])
+          }
+          array0 = result.slice()
+
+        }
+      }
+
+
+    }
+    return result
+
   }
 
 
@@ -590,7 +650,10 @@ var wuchengliang = function () {
     differenceWith,
     dropWhile,
     findIndex,
-
+    findLastIndex,
+    fromPairs,
+    intersection,
+    intersectionBy,
 
 
 
