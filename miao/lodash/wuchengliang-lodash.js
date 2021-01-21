@@ -557,8 +557,8 @@ var wuchengliang = function () {
   function intersection(...arrays) {
     var array1 = arrays[0]
     for (var i = 1; i < arrays.length; i++) {
+      var result = []
       for (k of arrays[i]) {
-        var result = []
         if (array1.includes(k)) {
           if (!result.includes(k)) {
             result.push(k)
@@ -584,14 +584,76 @@ var wuchengliang = function () {
             result.push(arrays[0][j])
           }
           array0 = result.slice()
-
         }
+      }
+    }
+    return result
+  }
+  function intersectionWith(...arrays) {
+    var pre = arrays.pop()
+    var iteratees = iteratee(pre)
+    var array0 = arrays[0]
+    for (let i = 1; i < arrays.length; i++) {
+      var result = []
+      array1 = arrays[i]
+      for (let j = 0; j < array0.length; j++) {
+        for (let k in array1) {
+          if (iteratees(array0[j], k)) {
+            if (!result.includes(arrays0[j])) {
+              result.push(array0[j])
+            }
+            array0 = result.slice()
+          }
+        }
+
       }
 
 
     }
     return result
+  }
+  function nth(array, n = 0) {
+    if (n < 0) {
+      return array[array.length + n]
+    }
+    return array[n]
+  }
+  function pull(array, ...values) {
+    let result = []
+    for (var k of array) {
+      if (!values.includes(k)) {
+        result.push(k)
+      }
+    }
+    return result
+  }
+  function pullAll(array, ...values) {
+    let result = []
+    values = flatten(values)
+    for (var k of array) {
+      if (!values.includes(k)) {
+        result.push(k)
+      }
+    }
+    return result
+  }
+  function pullAllBy(array, ...values) {
+    var pre = values.pop()
+    var iteratees = iteratee(pre)
+    var array0 = array.map(it => iteratees(it))
 
+    for (let i = 1; i < values.length; i++) {
+      var result = []
+      var array1 = values[i].map(it => iteratees(it))
+      for (var k of array0) {
+        if (!array1.includes(k)) {
+          result.push(k)
+        }
+        array0 = result.slice()
+      }
+
+    }
+    return result
   }
 
 
@@ -654,6 +716,11 @@ var wuchengliang = function () {
     fromPairs,
     intersection,
     intersectionBy,
+    intersectionWith,
+    nth,
+    pull,
+    pullAll,
+    pullAllBy,
 
 
 
