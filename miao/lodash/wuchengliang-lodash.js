@@ -655,6 +655,233 @@ var wuchengliang = function () {
     }
     return result
   }
+  function cloneDeep(val, map = new Map()) {
+    //使用字典map，是解决循环引用
+    if (isNull(val) || isundefined(val)) { return val }
+    if (isDate(val)) { return new Date(val) }
+    if (isRegExp(val)) { return new RegExp(val) }
+    if (!isObject(val)) {
+      return val
+    }
+    if (isArray(val)) {
+      let res = []
+      for (let items of val) {
+        res.push(cloneDeep(items))
+      }
+      return res
+    }
+    if (isObject(val)) {
+      let res = {}
+      for (let key in val) {
+        if (map.has(key)) {
+          //确定字典里面是否已经存在key
+          return map.get(value)
+          //如果存在就说明这个key已经被引用过了，返回他就行了，他里面包含了其他的对象
+        }
+        else {
+          map.set(key, val[key])
+          //没有的话，就把key，value这一对键值对存在字典里
+          if (isObject(val[key])) {
+            //如果是对象的话，就递归调用
+            res[key] = cloneDeep(val[key], map)
+          }
+          else {
+            //不是的话就直接复制
+            res[key] = val[key]
+          }
+
+        }
+
+      }
+      return res
+
+    }
+
+  }
+  function isRegExp(value) {
+    return Object.prototype.toString.call(value) === '[object RegExp]'
+  }
+  function isNull(value) {
+    return value == null
+  }
+  function isundefined(value) {
+    return value == undefined
+  }
+  // function isEqual(value, other) {
+  //   if (value === other) {
+  //     return true
+  //   }
+  //   else if (Object.prototype.toString.call(value) == Object.prototype.toString.call(other)) {
+  //     if (isArray(value)) {
+  //       for (let i = 0; i <= value.length; i++) {
+  //         if (isObject(value[i])) {
+  //           isEqual(value[i], other[i])
+  //         }
+  //         else if (value[i] !== other[i]) {
+  //           return false
+  //         }
+  //       }
+  //       return true
+  //     }
+  //     else if (isObject(value)) {
+  //       if (Object.keys(value).length !== Object.keys(other).length) {
+  //         return false
+  //       }
+  //       else {
+  //         for (let items in value) {
+  //           if (isObject(value[items])) {
+  //             isEqual(value[items], other[items])
+  //           }
+  //           else if (value[items] !== other[items]) {
+  //             return false
+  //           }
+
+  //         }
+  //         return true
+  //       }
+
+  //     }
+  //     else if (!isObject(value)) {
+  //       return value == other
+  //     }
+  //   }
+  //   return false
+  // }
+  function isEqual(value, other) {
+    if (value === other) {
+      return true
+    }
+    if (Object.prototype.toString.call(value) !== Object.prototype.toString.call(other)) {
+      return false
+    }
+    if (typeof value != 'object') {
+      return false
+    }//object.keys(value)会返回 这个对象里的属性名组成的数组
+    if (Object.keys(value).length !== Object.keys(other).length) {
+      return false
+    }
+    for (let key in other) {
+      if (!Object.keys(value).includes(key) || !isEqual(value[key], other[key])) {
+        return false
+      }
+    }
+    return true
+
+
+  }
+  function isEqualWith(value, other, customizer) {
+    if (customizer(value) === customizer(other)) {
+      return true
+    }
+    for (let key in other) {
+      if (!Object.keys(value).includes(key) || !isEqualWith(value[key], other[key])) {
+        return false
+      }
+    }
+    return true
+  }
+
+
+  function isArguments(value) {
+    return Object.prototype.toString.call(value) === "[object Arguments]"
+  }
+  function isArray(value) {
+    return Array.isArray(value)
+  }
+  function isArrayBuffer(value) {
+    return Object.prototype.toString.call(value) === "[object ArrayBuffer]"
+  }
+  function isArrayLike(value) {
+    return (typeof (value) != 'function' && value != null && value.length > 0)
+  }
+  function isArrayLikeObject(value) {
+    return isArrayLike(value) && Object.prototype.toString.call(value) == 'object Object'
+  }
+  function isBoolean(value) {
+    return Object.prototype.toString.call(value) == 'object Boolean'
+  }
+  function isDate(value) {
+    return Object.prototype.toString.call(value) === '[object Date]'
+  }
+  function isElement(value) {
+    return Object.prototype.toString.call(value) === "[object HTMLBodyElement]"
+  }
+  function isEmpty(value) {
+
+    for (let p in value) {
+      return false
+    }
+    return true
+
+  }//传入的参数是否为空
+  function isError(value) {
+    return Object.prototype.toString.call(value) == '[object Error]'
+  }//判断是否是一个错误对象
+  function isFinite(value) {
+    return Number.isFinite(value)
+  }//判断是否是一个有穷数
+  function isFunction(value) {
+    return Object.prototype.toString.call(value) === '[object Function]'
+  }//判断是否是一个函数
+  function isInteger(value) {
+    return Number.isInteger(value)
+  }//判断是否是个整数
+  function isLength(value) {
+    return isInteger(value) && value >= 0;
+  }
+  function isMap(value) {
+    return Object.prototype.toString.call(value) === '[object Map]'
+  }
+  function isNaN(value) {
+    if (typeof value == "object") {
+      return value.valueOf() !== value.valueOf();
+    }
+    return Number.isNaN(value);
+  }
+  function isNative(value) {
+    return value.toString().includes("[native code]")
+  }
+  function isNull(value) {
+    return Object.prototype.toString.call(value) === '[object Null]'
+  }
+  function isNil(value) {
+    return value === null || value === undefined;
+  }
+  function isNumber(value) {
+    return Object.prototype.toString.call(value) === '[object Number]';
+  }
+  function isObject(value) {
+    return typeof value === 'object' && !isNull(value) || typeof value === 'function'
+  }
+  function isObjectLike(value) {
+    return typeof value === 'object' && !isNull(value)
+  }
+  function isPlainObject(value) {
+    return value.__proto__ === Object.prototype || value.__proto__ == null;
+  }
+  function isSafeInteger(value) {
+    return Number.isSafeInteger(value);
+  }
+  function isSet(value) {
+    return Object.prototype.toString.call(value) === '[object Set]';
+  }
+  function isString(value) {
+    return Object.prototype.toString.call(value) === '[object String]'
+  }
+  function isSymbol(value) {
+    return Object.prototype.toString.call(value) === '[object Symbol]'
+  }
+  function isTypedArray(value) {
+    return Object.prototype.toString.call(value) === '[object Uint8Array]'
+  }
+  function isWeakMap(value) {
+    return Object.prototype.toString.call(value) === '[object WeakMap]'
+  }
+  function isWeakSet(value) {
+    return Object.prototype.toString.call(value) === '[object WeakSet]'
+  }
+
+
 
 
 
@@ -721,9 +948,41 @@ var wuchengliang = function () {
     pull,
     pullAll,
     pullAllBy,
-
-
-
+    cloneDeep,
+    isRegExp,
+    isundefined,
+    isNull,
+    isObject,
+    isEqual,
+    isObjectLike,
+    isArray,
+    isEqualWith,
+    isArguments,
+    isArrayBuffer,
+    isArrayLike,
+    isArrayLikeObject,
+    isBoolean,
+    isElement,
+    isEmpty,
+    isError,
+    isFinite,
+    isFunction,
+    isInteger,
+    isLength,
+    isMap,
+    isNaN,
+    isNative,
+    isNull,
+    isNil,
+    isNumber,
+    isPlainObject,
+    isSafeInteger,
+    isSet,
+    isString,
+    isSymbol,
+    isTypedArray,
+    isWeakMap,
+    isWeakSet,
   }
 
 
