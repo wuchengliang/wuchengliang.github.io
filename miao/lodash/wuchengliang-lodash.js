@@ -436,8 +436,15 @@ var wuchengliang = function () {
   function map(collection, iteratees = identity) {
     let result = []
     iteratees = iteratee(iteratees)
-    for (var k in collection) {
-      result.push(iteratees(collection[k]))
+    if (isArray(collection)) {
+      for (let i = 0; i < collection.length; i++) {
+        result.push(iteratees(collection[i]))
+      }
+    }
+    else if (isObject(collection)) {
+      for (let key in collection) {
+        result.push(iteratees(key))
+      }
     }
     return result
   }
@@ -638,26 +645,31 @@ var wuchengliang = function () {
     return result
   }
   function pullAllBy(array, ...values) {
-    var pre = values.pop()
-    var iteratees = iteratee(pre)
-    var array0 = array.map(it => iteratees(it))
-
-    for (let i = 1; i < values.length; i++) {
-      var result = []
+    let pre = values.pop()
+    let iteratees = iteratee(pre)
+    let array0 = array.map(it => iteratees(it))
+    let result1 = []
+    let result2 = []
+    for (let i = 0; i <= length; i++) {
       var array1 = values[i].map(it => iteratees(it))
-      for (var k of array0) {
-        if (!array1.includes(k)) {
-          result.push(k)
-        }
-        array0 = result.slice()
+    }
+    for (let k of array0) {
+      if (!array1.includes(k)) {
+        result1.push(k)
       }
 
     }
-    return result
+    for (let i = 0; i < array.length; i++) {
+      if (result1.includes(iteratees(array[i]))) {
+        result2.push(array[i])
+      }
+    }
+
+    return result2
   }
   function cloneDeep(val, map = new Map()) {
     //使用字典map，是解决循环引用
-    if (isNull(val) || isundefined(val)) { return val }
+    if (isNull(val) || isUndefined(val)) { return val }
     if (isDate(val)) { return new Date(val) }
     if (isRegExp(val)) { return new RegExp(val) }
     if (!isObject(val)) {
@@ -704,7 +716,7 @@ var wuchengliang = function () {
   function isNull(value) {
     return value == null
   }
-  function isundefined(value) {
+  function isUndefined(value) {
     return value == undefined
   }
   // function isEqual(value, other) {
@@ -795,10 +807,10 @@ var wuchengliang = function () {
     return (typeof (value) != 'function' && value != null && value.length > 0)
   }
   function isArrayLikeObject(value) {
-    return isArrayLike(value) && Object.prototype.toString.call(value) == 'object Object'
+    return isArrayLike(value) && Object.prototype.toString.call(value) == '[object Object]'
   }
   function isBoolean(value) {
-    return Object.prototype.toString.call(value) == 'object Boolean'
+    return Object.prototype.toString.call(value) == '[object Boolean]'
   }
   function isDate(value) {
     return Object.prototype.toString.call(value) === '[object Date]'
@@ -880,6 +892,231 @@ var wuchengliang = function () {
   function isWeakSet(value) {
     return Object.prototype.toString.call(value) === '[object WeakSet]'
   }
+  function union(...arrays) {
+    array1 = flattenDeep([...arrays])
+
+
+
+    return uniq(array1)
+
+  }
+  function unionBy(...arrays) {
+    var iteratees = iteratee(arrays.pop())
+    var array1 = flattenDeep([...arrays])
+    return uniqBy(array1, iteratees)
+  }
+  function uniq(array) {
+    return Array.from(new Set(array))
+  }
+  function uniqBy(ary, iteratees) {
+    let res = []
+    let map = []
+    iteratees = iteratee(iteratees)
+    for (let i = 0; i < ary.length; i++) {
+      if (!map.includes(iteratees(ary[i]))) {
+        res.push(ary[i])
+        map.push(iteratees(ary[i]))
+      }
+    }
+    return res
+
+
+  }
+
+  function unzip(array) {
+    var alength = Object.keys(array[0]).length
+    var result = Array.from({ length: alength }, () => ([]))
+    //创建出非共享的数组
+    for (let i = 0; i < alength; i++) {
+      for (let m = 0; m < array.length; m++) {
+        result[i].push(array[m][i])
+      }
+    }
+    return result
+  }
+  function zip(...arrays) {
+    arrays = [...arrays]
+    var result1 = []
+    var result2 = []
+    for (let i = 0; i < arrays.length; i++) {
+      result1.push(arrays[i][0])
+      result2.push(arrays[i][1])
+    }
+    return [result1, result2]
+  }
+  function zipObject(props, values) {
+    var result = {}
+    for (let i = 0; i < props.length; i++) {
+      result[props[i]] = values[i]
+    }
+    return result
+  }
+  function without(...arrays) {
+    var array = arrays.shift()
+    var result = []
+    for (let i of array) {
+      if (!arrays.includes(i)) {
+        result.push(i)
+      }
+    }
+    return result
+  }
+  function xor(...arrays) {
+    var array = flattenDeep(arrays)
+    var result = []
+    var pop = []
+    for (let i of array) {
+      if (result.includes(i)) {
+        pop.push(i)
+      }
+      else {
+        result.push(i)
+      }
+    }
+    for (let i of pop) {
+      if (result.includes(i)) {
+        result = result.filter(it => it != i)
+      }
+    }
+    return result
+
+  }
+
+  function countBy(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    var ary1 = ary.map(it => iteratees(it))
+    var ary2 = []
+    var result = {}
+    for (let i of ary1) {
+      if (ary2.includes(i)) {
+        result[i]++
+      }
+      else {
+        ary2.push(i)
+        result[i] = 1
+      }
+    }
+    return result
+  }
+  function filter(ary, iteratees = identity) {
+    var result = []
+    iteratees = iteratee(iteratees)
+    for (let i = 0; i < ary.length; i++) {
+      if (iteratees(ary[i])) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  }
+  function find(ary, iteratees = identity, index = 0) {
+    iteratees = iteratee(iteratees)
+    for (let i = index; i < ary.length; i++) {
+      if (iteratees(ary[i])) {
+
+        return ary[i]
+      }
+    }
+
+  }
+  function flatMap(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    return flattenDeep(ary.map(it => iteratees(it)))
+
+  }
+  function flatMapDeep(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    return flattenDeep(ary.map(it => iteratees(it)))
+
+  }
+  function flatMapDepth(ary, iteratees = identity, depth = 1) {
+    iteratees = iteratee(iteratees)
+    return flattenDepth(ary.map(it => iteratees(it)), depth)
+
+  }
+  function forEach(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    for (let i in ary) {
+      iteratees(ary[i], i, ary)
+    }
+  }
+  function partition(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    var result1 = []
+    var result2 = []
+    for (let i of ary) {
+      if (iteratees(i)) {
+        result1.push(i)
+      }
+      else {
+        result2.push(i)
+      }
+    }
+    return [result1, result2]
+
+  }
+  function keyBy(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    var result = {}
+    for (let i of ary) {
+      result[iteratees(i)] = i
+    }
+    return result
+
+  }
+  function reduce(ary, iteratees = identity, result = 0) {
+    iteratees = iteratee(iteratees)
+
+    for (var i in ary) {
+      result = iteratees(result, ary[i], i)
+    }
+    return result
+  }
+  function reduceRight(ary, iteratees = identity, result = 0) {
+    iteratees = iteratee(iteratees)
+    for (let i = ary.length - 1; i >= 0; i--) {
+      result = iteratees(result, ary[i], i)
+    }
+    return result
+
+  }
+  function reject(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    var result = []
+    for (let i of ary) {
+      if (!iteratees(i)) {
+        result.push(i)
+      }
+    }
+    return result
+  }
+  function sample(ary) {
+    var i = Math.floor(Math.random() * ary.length)
+    return ary[i]
+  }
+  function shuffle() {
+    var result = []
+
+  }
+  function size(collection) {
+    if (isObject(collection)) {
+      ary = collection
+    }
+    else { ary = flattenDeep([...collection]) }
+    var count = 0
+    for (let i in ary) {
+      count++
+    }
+    return count
+  }
+  function sortBy(collection, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    var result = []
+
+  }
+
+
+
+
 
 
 
@@ -950,7 +1187,7 @@ var wuchengliang = function () {
     pullAllBy,
     cloneDeep,
     isRegExp,
-    isundefined,
+    isUndefined,
     isNull,
     isObject,
     isEqual,
@@ -983,6 +1220,31 @@ var wuchengliang = function () {
     isTypedArray,
     isWeakMap,
     isWeakSet,
+    union,
+    unionBy,
+    uniq,
+    uniqBy,
+    zip,
+    unzip,
+    zipObject,
+    without,
+    xor,
+    countBy,
+    filter,
+    find,
+    flatMap,
+    flatMapDeep,
+    flatMapDepth,
+    forEach,
+    partition,
+    keyBy,
+    reduce,
+    reduceRight,
+    reject,
+    sample,
+    shuffle,
+    size,
+    sortBy,
   }
 
 
