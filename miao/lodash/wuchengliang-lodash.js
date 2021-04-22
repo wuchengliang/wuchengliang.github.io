@@ -1038,6 +1038,7 @@ var wuchengliang = function () {
     for (let i in ary) {
       iteratees(ary[i], i, ary)
     }
+    return ary
   }
   function partition(ary, iteratees = identity) {
     iteratees = iteratee(iteratees)
