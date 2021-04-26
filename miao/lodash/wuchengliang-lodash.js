@@ -714,10 +714,10 @@ var wuchengliang = function () {
     return Object.prototype.toString.call(value) === '[object RegExp]'
   }
   function isNull(value) {
-    return value == null
+    return value === null
   }
   function isUndefined(value) {
-    return value == undefined
+    return value === undefined
   }
   // function isEqual(value, other) {
   //   if (value === other) {
@@ -807,7 +807,7 @@ var wuchengliang = function () {
     return (typeof (value) != 'function' && value != null && value.length > 0)
   }
   function isArrayLikeObject(value) {
-    return isArrayLike(value) && Object.prototype.toString.call(value) == '[object Object]'
+    return isArrayLike(value) && Object.prototype.toString.call(value) !== '[object Object]'
   }
   function isBoolean(value) {
     return Object.prototype.toString.call(value) == '[object Boolean]'
@@ -1109,11 +1109,64 @@ var wuchengliang = function () {
     }
     return count
   }
-  function sortBy(collection, iteratees = identity) {
+  function sortBy(col, iteratees = identity) {
     iteratees = iteratee(iteratees)
-    var result = []
+    for (var i = col.length - 2; i >= 0; i--) {
+      var swapped = false
+      for (var j = 0; j <= i; j++) {
+        if (iteratees(col[j]) < iteratees(col[j + 1])) {
+          swap(col, j, j + 1)
+          swapped = true
+        }
+      }
+      if (swapped == false) {
+        break
+      }
+    }
+    return col
+    //传的的函数参数外面被数组包起来了
+  }
+  function swap(ary, i, j) {
+    var t = ary[i]
+    ary[i] = ary[j]
+    ary[j] = t
+  }
+  function defer(func, ...args) {
+
+
+    return setTimeout(func, 0, ...args) - 1
+  }
+  function delay(func, wait, ...args) {
+    return setTimeout(func, wait, ...args) - 1
 
   }
+  function ceil(number, precision = 0) {
+
+    return Math.ceil(number * 10 ** precision) / 10 ** precision
+
+  }
+  function maxBy(ary, iteratees = identity) {
+    iteratees = iteratee(iteratees)
+    var result = ary.map(it => iteratees(it))
+    maxresult = max(result)
+    for (let i of ary) {
+      if (iteratees(i) == maxresult) {
+        return i
+      }
+    }
+
+  }
+  function assignIn(object, ...sources) {
+    sources.forEach(
+      it => {
+        for (let i in it) {
+          object[i] = it[i]
+        }
+      }
+    )
+    return object
+  }
+
 
 
 
@@ -1246,6 +1299,12 @@ var wuchengliang = function () {
     shuffle,
     size,
     sortBy,
+    defer,
+    delay,
+    isDate,
+    ceil,
+    maxBy,
+    assignIn,
   }
 
 
